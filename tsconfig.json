@@ -1,0 +1,27 @@
+{ "compilerOptions":
+	{ "module": "commonjs"
+	, "target":"es6"
+	, "moduleResolution": "node"
+	, "noImplicitAny": false
+	, "experimentalDecorators": true
+	, "emitDecoratorMetadata": true
+	, "removeComments": false
+	, "preserveConstEnums": true
+	, "declaration": true
+	, "allowSyntheticDefaultImports":true
+	, "jsx":"react"
+	, "outDir": "./dist"
+	, "sourceMap": true
+	}
+, "filesGlob":
+	[ "./typings/index.d.ts"
+	, "./src/definitions.d.ts"
+	, "./src"
+	]
+, "exclude":
+	[ "node_modules"
+	, "dist"
+	, "test"
+	, ".git"
+	]
+}
