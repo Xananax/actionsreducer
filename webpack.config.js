@@ -20,6 +20,14 @@ const css_loader = `css-loader${IS_SERVER?'/locals':''}`+'?'+JSON.stringify(
 	, localIdentName:'[name]_[local]_[hash:base64:5]'
 	})
 
+const noChangesCss_loader = `css-loader${IS_SERVER?'/locals':''}`+'?'+JSON.stringify(
+	{ modules:true
+	, importLoaders:1
+	, sourcemap:true
+	, camelCase:true
+	, localIdentName:'[local]'
+	}) 
+
 module.exports = 
 	{ entry: 
 		{ index:'./index.ts'
@@ -78,6 +86,15 @@ module.exports =
 				}
 			,	{ test:/\.css$/
 				, loader: 
+					IS_DEV || IS_SERVER ? 
+						[ 'style-loader'
+						, noChangesCss_loader
+						].join('!') :
+						ExtractTextPlugin.extract("css", "css-loader")
+				, include:/node_modules/
+				}
+			,	{ test:/\.css$/
+				, loader: 
 					IS_DEV || IS_SERVER ?
 						[ 'style-loader'
 						, css_loader
@@ -94,7 +111,6 @@ module.exports =
 						, 'stylus-loader'
 						].join('!') :
 						ExtractTextPlugin.extract("stylus", "css-loader!stylus-loader")
-				, exclude:/node_modules/
 				}
 			]
 		}

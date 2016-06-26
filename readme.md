@@ -18,7 +18,7 @@ Furthermore, the ActionsReducer project itself demonstrates:
 
 ## Usage
 
-```sh
+```bash
 npm install --save actionsreducers
 ```
 
@@ -256,7 +256,7 @@ There's no coding guidelines, as long as it's readable, anything goes.
 
 Just submit a ticket, fork, PR.
 
-```sh
+```bash
 git clone https://github.com/Xananax/actionsreducer.git && cd actionsreducer &&\
 npm install &&\
 npm run typings
@@ -276,7 +276,7 @@ Then:
 
 Very lacking for the moment, but coming soon...
 
-```sh
+```bash
 npm test
 ```
 

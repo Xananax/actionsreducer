@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component, PropTypes } from 'react';
 import Picker from './Picker';
 import RedditPosts from './RedditPosts';
-import Source from '../../Source';
+import Wrapper from '../../Wrapper';
 
 export interface RedditPropTypes{
 	selectedSubreddit?:string;
@@ -71,7 +71,7 @@ export default class Reddit extends Component<RedditPropTypes,void> {
 			, isFetching
 			, lastUpdated 
 			} = this.props;
-		return (<Source text={require('../readme')} code={require('!!raw!../data')}>
+		return (<Wrapper text={require('../readme')} source={require('!!raw!../data')} name="reddit">
 			<Picker value={selectedSubreddit}
 				onChange={this.handleChange}
 				options={[ 'reactjs', 'frontend' ]} 
@@ -101,6 +101,6 @@ export default class Reddit extends Component<RedditPropTypes,void> {
 					<RedditPosts posts={items} />
 				</div>
 			}
-		</Source>);
+		</Wrapper>);
 	}
 }

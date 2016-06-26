@@ -2,14 +2,14 @@ import * as React from 'react'
 import TodosFooter from './components/TodosFooter'
 import AddTodo from './AddTodo'
 import VisibleTodoList from './VisibleTodoList'
-import Source from '../Source';
+import Wrapper from '../Wrapper';
 
 const Todos = () => (
-	<Source text={require('./readme')} code={require('!!raw!./data')}>
+	<Wrapper name="todos" text={require('./readme')} source={require('!!raw!./data')}>
 		<AddTodo />
 		<VisibleTodoList />
 		<TodosFooter />
-	</Source>
+	</Wrapper>
 )
 
 export default Todos;

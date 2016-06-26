@@ -6,37 +6,19 @@ import
 	} from 'react-router';
 
 import Main from './Main';
-import Pages from './Pages';
-import Reddit from './Reddit';
-import Todos from './Todos';
-import pagesRoutes from './Pages/routes';
-
-const NotFound = () =>(
-	<div>404</div>
-)
-
-export const apps = [
-		{ name:'Todos Example'
-		, to:'todos'
-		, app:Todos
-		}
-	,	{ name:'Reddit Example'
-		, to:'reddit'
-		, app:Reddit
-		}
-	]
+import Page from './Page';
+import pages from './pages';
 
 
 const Routes = (
 	<Route path="/" component={Main}>
-		<IndexRoute component={Pages} />
-		{ apps.map(({to,app})=><Route key={to} path={to} component={app}/>
-		)}
-		<Route path="page">
-			{pagesRoutes}
+		<IndexRoute component={Page} />
+		<Route path='/page(/:page)' component={Page}>
+			<Redirect from="*" to='404' />
 		</Route>
-		<Route path="404" component={Pages} />
-		<Redirect from="*" to="404" />
+		{ pages.map(({to,app})=><Route key={to} path={to} component={app}/>
+		)}
+		<Redirect from="*" to="page" />
 	</Route>
 )
 

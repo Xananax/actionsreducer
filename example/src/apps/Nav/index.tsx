@@ -1,28 +1,28 @@
 import * as React from 'react';
 import * as classnames from 'classnames';
-import { Link } from 'react-router';
+import NavLink,{NavLinkPropTypes} from './components/NavLink';
 
 const style = require('./Nav.styl');
 
-function onClick(name,change){
-	return function(e){
-		e.preventDefault();
-		change(name);
-	}
-}
-
 export interface NavPropTypes{
-	links:{to:string,name:string}[];
+	links:NavLinkPropTypes[];
 	title:string;
+	className?:string;
 }
 
-const Nav:React.StatelessComponent<NavPropTypes> = ({links,title}) => (
-	<ul className={style.Nav}>
-		<Link to={`/page/`}>page</Link>
-		{
-			links.map(({name,to})=><li key={to}><Link to={`/${to}`}>{name}</Link></li>)
-		}
-	</ul>
+const Nav:React.StatelessComponent<NavPropTypes> = ({links,title,className}) => (
+	<div className={classnames(
+			[ style.Nav
+			, style[className]
+			])}
+		>
+		<ul>
+			{ title && (<li><h1>{title}</h1></li>) }
+			{
+				links.map(({name,to})=><li key={to}><NavLink to={to} name={name}/></li>)
+			}
+		</ul>
+	</div>
 )
 
 export default Nav;

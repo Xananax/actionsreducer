@@ -200,3 +200,7 @@ interface NodeRequireContext{
 interface NodeRequire{
 	context(path:string,useSubdirectories?:boolean,regexp?:RegExp):NodeRequireContext;
 }
+
+declare module 'prismjs'{
+	export = Prism;
+}

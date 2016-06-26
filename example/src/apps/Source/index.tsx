@@ -1,12 +1,16 @@
 import * as React from 'react';
 import {Component} from 'react';
 import * as classnames from 'classnames';
+import getPrism from '../../vendor/Prism';
+
+const Prism = getPrism('typescript','funky');
 
 const style = require('./Source.styl');
 
 export interface SourcePropTypes{
-	text:string;
 	code:string;
+	hidden?:boolean;
+	language?:string;
 } 
 
 export interface SourceState{
@@ -17,7 +21,9 @@ export default class Source extends Component<SourcePropTypes,SourceState>{
 
 	constructor(props,context){
 		super(props,context);
-		this.state = {hidden:true};
+		this.state = 
+			{ hidden:('hidden' in props) ? !!props.hidden : true 
+			};
 		this.onClick = this.onClick.bind(this);
 	}
 
@@ -28,27 +34,25 @@ export default class Source extends Component<SourcePropTypes,SourceState>{
 	}
 
 	render(){
-		const {text,code,children} = this.props;
+		const {code,language} = this.props;
 		const {hidden} = this.state;
 		const hideLinkText = hidden ? 'show' : 'hide';
 		const className = classnames(
 			[ style.Source
 			, hidden && style.hidden
 			]);
+		const markup = `language-${language?language:'typescript'}`;
+		const highlighted = Prism.highlight(code, Prism.languages['typescript']);
+
 		return (
 			<div className={className}>
-				<div className={style.text} dangerouslySetInnerHTML={{__html:text}}/>
-					{children}
-				<div className={style.code}>
-					<a href="#" onClick={this.onClick}>
-						{hideLinkText} source
-					</a>
-					<pre>
-						<code>
-							{code}
-						</code>
-					</pre>
-				</div>
+				<a href="#" onClick={this.onClick} className={style.link}>
+					{hideLinkText} source
+				</a>
+				<pre className={markup}>
+					<code className={markup} dangerouslySetInnerHTML={{__html:highlighted}}>
+					</code>
+				</pre>
 			</div>
 		)
 	}

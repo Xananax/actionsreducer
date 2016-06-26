@@ -49,6 +49,7 @@
     "markdown-loader": "^0.1.7",
     "mocha": "^2.5.3",
     "phantomjs-prebuilt": "^2.1.7",
+    "prismjs": "^1.5.1",
     "raw-loader": "^0.5.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
