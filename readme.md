@@ -21,7 +21,7 @@ Furthermore, the ActionsReducer project itself demonstrates:
 ## Usage
 
 ```bash
-npm install --save actionsreducers
+npm install --save actionsreducer
 ```
 
 also, in case you don't have, already:

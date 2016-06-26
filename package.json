@@ -1,6 +1,6 @@
 {
   "name": "actionsreducer",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "helper for creating redux actions and reducers",
   "main": "dist/index",
   "browser": "browser/index",
