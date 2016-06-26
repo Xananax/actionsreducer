@@ -1,6 +1,8 @@
 # ActionsReducer
 
-Helpers to create actions and reducers for [https://github.com/reactjs/redux](Redux).
+[Website and Examples](https://xananax.github.io/actionsreducer)
+
+Helpers to create actions and reducers for [Redux](https://github.com/reactjs/redux).
 
 Actionsreducer simplifies:
  
