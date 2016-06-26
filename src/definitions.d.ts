@@ -1,4 +1,6 @@
 
+/// <reference path="../typings/index.d.ts" />
+
 declare namespace AR_Utils{
 
 	export interface Obj<TYPE>{
