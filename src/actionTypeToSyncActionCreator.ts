@@ -7,8 +7,8 @@ export default function actionTypeToSyncActionCreator<T>
 	):AR_Redux.ActionCreator
 	{
 		const actionCreator = function actionCreator
-			( payload:AR_Redux.Payload<T>
-			, meta:AR_Redux.Meta
+			( payload:any
+			, meta:any
 			, err?:boolean
 			):AR_Redux.Action
 			{

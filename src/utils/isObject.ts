@@ -13,5 +13,5 @@
  * @returns {boolean}
  */
 export default function isObject(thing:any):thing is Object{
-	return (thing && typeof thing == 'object');
+	return (thing != null && typeof thing == 'object');
 }

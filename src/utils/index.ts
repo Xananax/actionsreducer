@@ -8,6 +8,7 @@ import isThenable from './isThenable';
 import isPromise from './isPromise';
 import loop from './loop';
 import strCapitalizeFirst from './strCapitalizeFirst';
+import createCamelCaseIdentifier from './createCamelCaseIdentifier';
 import strToSnakeCase from './strToSnakeCase';
 
 export 
@@ -21,5 +22,6 @@ export
 	, isPromise
 	, loop
 	, strCapitalizeFirst
+	, createCamelCaseIdentifier
 	, strToSnakeCase
 	}

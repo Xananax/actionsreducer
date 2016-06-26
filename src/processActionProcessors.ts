@@ -8,10 +8,11 @@ export default function processActionProcessors<T>
 	, actions:AR_Build.Actions
 	, parentIdentifier:AR_Conf.CapitalizedString
 	, parentType:AR_Conf.SnakeCasedString
+	, path:string[]
 	)
 	{
 		loop(actionsConf,(conf,id)=>
-			processActionProcessor(state,processors,actions,parentIdentifier,parentType,conf,id)
+			processActionProcessor(state,processors,actions,parentIdentifier,parentType,conf,id,path)
 		)
 		
 	}

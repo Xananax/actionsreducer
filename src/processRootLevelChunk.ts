@@ -8,11 +8,12 @@ export default function processRootLevelChunk<T>
 	, parentActions:AR_Build.Actions
 	, parentIdentifier:AR_Conf.CapitalizedString
 	, parentType:AR_Conf.SnakeCasedString
+	, path:string[]
 	)
 	{
 
-		const [processor,state,actions] = processStateChunk(stateChunk,parentIdentifier,parentType);
-
+		const [processor,state,actions] = processStateChunk(stateChunk,parentIdentifier,parentType,path);
+		
 		loop(actions,function(action){
 			const {identifier,type} = action;
 			parentActions[identifier] = action;

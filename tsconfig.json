@@ -8,7 +8,7 @@
 	, "removeComments": false
 	, "preserveConstEnums": true
 	, "declaration": true
-	, "allowSyntheticDefaultImports":true
+	, "allowSyntheticDefaultImports":false
 	, "jsx":"react"
 	, "outDir": "./dist"
 	, "sourceMap": true

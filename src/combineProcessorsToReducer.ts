@@ -1,4 +1,5 @@
 import assign from './utils/assign';
+import CANCEL from './CANCEL';
 
 export default function combineProcessorsToReducer<T>
 	( initialState:T
@@ -13,7 +14,14 @@ export default function combineProcessorsToReducer<T>
 			const {identifier} = processor;
 			const subState = state[identifier];
 			const ret = processor(subState,payload,meta,type);
-			if(ret==null || ret===false){return state;}
+			if(
+				ret==null || 
+				ret===false || 
+				ret===CANCEL ||
+				ret===subState
+			){
+				return state;
+			}
 			return assign(state,{[identifier]:ret});
 		}
 

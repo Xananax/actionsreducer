@@ -1,13 +1,24 @@
 const path = require('path');
 const webpack = require('webpack');
 const failPlugin = require('webpack-fail-plugin');
-
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const PKG = require('./package.json');
 
 const NAME = PKG.name;
 const VERSION = PKG.version; 
 const IS_PROD = (process.env.NODE_ENV == 'production');
 const IS_MIN = (process.env.MINIMIZE == 'true');
+const IS_DEV = !IS_PROD;
+const IS_SERVER = process.env.SERVER; //for server rendering;
+const IS_BROWSER = !IS_SERVER;
+
+const css_loader = `css-loader${IS_SERVER?'/locals':''}`+'?'+JSON.stringify(
+	{ modules:true
+	, importLoaders:1
+	, sourcemap:true
+	, camelCase:true
+	, localIdentName:'[name]_[local]_[hash:base64:5]'
+	})
 
 module.exports = 
 	{ entry: 
@@ -22,7 +33,18 @@ module.exports =
 		, libraryTarget:'umd'
 		}
 	, resolve:
-		{ extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+		{ extensions: 
+			[ ""
+			, ".webpack.js"
+			, ".web.js"
+			, ".ts"
+			, ".tsx"
+			, ".js"
+			, ".md"
+			, ".markdown"
+			, ".styl"
+			, ".css"
+			]
 		}
 	, plugins:
 		[ failPlugin
@@ -32,20 +54,47 @@ module.exports =
 				{ warnings: false
 				}
 			})
+		, IS_PROD && new ExtractTextPlugin("style.css", {allChunks: true})
 		].filter(Boolean)
 	, module:
 		{ loaders:
 			[
 				{ test: /\.tsx?$/
-				, loader: 'awesome-typescript-loader' 
-				, query:
+				, loader: 'awesome-typescript-loader'+'?'+JSON.stringify(
 					{ silent:true
 					, useBabel:true
 					, resolveGlobs:true
 					, forkCheckerSilent:true
 					, declaration:false
-					}
-				, include: path.resolve(__dirname, "./src") 
+					})
+				, include: path.resolve(__dirname, "./src")
+				, exclude:/node_modules/
+				}
+			,	{ test:/\.(md|markdown)$/
+				, loaders:
+					[ 'html-loader'
+					, 'markdown-loader'
+					]
+				}
+			,	{ test:/\.css$/
+				, loader: 
+					IS_DEV || IS_SERVER ?
+						[ 'style-loader'
+						, css_loader
+						].join('!') :
+						ExtractTextPlugin.extract("css", "css-loader")
+				, exclude:/node_modules/
+				}
+			,	{ test: /\.styl$/
+				, loader: 
+					IS_DEV || IS_SERVER ?
+						[ 'style-loader'
+						, css_loader
+						//, 'postcss-loader'
+						, 'stylus-loader'
+						].join('!') :
+						ExtractTextPlugin.extract("stylus", "css-loader!stylus-loader")
+				, exclude:/node_modules/
 				}
 			]
 		}

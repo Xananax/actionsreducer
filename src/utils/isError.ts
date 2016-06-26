@@ -11,7 +11,7 @@
  */
 export default function isError(thing:any):thing is Error{
 	return (
-		(typeof thing !== 'undefined') &&
+		(thing != null) &&
 		(thing instanceof Error)
 	);
 }

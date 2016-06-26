@@ -1,5 +1,6 @@
 import strToSnakeCase from './utils/strToSnakeCase';
-import strCapitalizeFirst from './utils/strCapitalizeFirst';
+import getByPath from './utils/getByPath';
+import createCamelCaseIdentifier from './utils/createCamelCaseIdentifier';
 import isError from './utils/isError';
 import errToPayload from './utils/errToPayload';
 import isPromise from './utils/isPromise';
@@ -7,25 +8,30 @@ import defaultAsyncActions from './defaultAsyncActions';
 import actionTypeToSyncActionCreator from './actionTypeToSyncActionCreator';
 import mapActionCreatorsToDispatch from './mapActionCreatorsToDispatch';
 import SKIP from './SKIP';
+import CANCEL from './CANCEL';
 import appendActionCreatorsToObj from './appendActionCreatorsToObj';
+
 
 export default function actionTypeToAsyncActionCreator<T>
 	( identifier:AR_Conf.CapitalizedString
 	, type:AR_Conf.SnakeCasedString
 	, asyncFn:AR_Conf.AsyncActionProcessorMain
+	, path:string[]
 	):AR_Redux.AsyncActionCreator
 	{
 		
 		const actionsArray = defaultAsyncActions.map(id=>
 			actionTypeToSyncActionCreator
-				( strCapitalizeFirst([identifier,id])
+				( createCamelCaseIdentifier(identifier,id)
 				, strToSnakeCase([identifier,id])
 				) 
 		);
-
+		
+		const statePath = path.slice(0,path.length-1);
+		//console.log(actionsArray.map(a=>a.type))
 		const actionCreator = function asyncActionCreator
-			( payload:AR_Redux.Payload<T>
-			, meta:AR_Redux.Meta
+			( payload:any
+			, meta:any
 			, err?:boolean
 			)
 			{
@@ -42,10 +48,12 @@ export default function actionTypeToAsyncActionCreator<T>
 							return Promise.reject(error);
 						}
 						const actionDispatchers = mapActionCreatorsToDispatch(dispatch,actionsArray);
-
+						
 						actionDispatchers.started(payload,meta);
 
-						const ret = asyncFn(getState(),payload,meta,actionDispatchers,dispatch,type);
+						const state = getByPath(statePath,getState());
+
+						const ret = asyncFn(state,payload,meta,actionDispatchers,dispatch,type);
 
 						const promise:Promise<any> = isPromise(ret) ? 
 							ret : 
@@ -54,11 +62,15 @@ export default function actionTypeToAsyncActionCreator<T>
 								Promise.resolve(ret)
 						; 
 						function onSuccess(result){
+							if(result == null || result === false || result === CANCEL){
+								actionDispatchers.cancelled(result);
+								return result;
+							}
 							actionDispatchers.success(result,meta);
 							return result;
 						}
 						function onError(err){
-							if(err == SKIP){return;}
+							if(err == SKIP){return err;}
 							actionDispatchers.error(err,meta);
 							return err;
 						}
@@ -69,6 +81,9 @@ export default function actionTypeToAsyncActionCreator<T>
 		actionCreator.type = type;
 		actionCreator.identifier = identifier;
 		actionCreator.start = actionCreator;
-		appendActionCreatorsToObj(actionsArray,actionCreator);
+		defaultAsyncActions.forEach(function(name,index){
+			const ac = actionsArray[index];
+			actionCreator[name] = ac;
+		})
 		return actionCreator;
 	}

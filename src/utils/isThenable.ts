@@ -11,7 +11,7 @@ import isFunction from './isFunction';
  */
 export default function isThenable(thing:any):thing is PromiseLike<any>{
 	return (
-		(typeof thing != 'undefined') &&
+		(thing != null) &&
 		('then' in thing) &&
 		(isFunction(thing.then))
 	);

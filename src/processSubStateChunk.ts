@@ -9,18 +9,19 @@ export default function processSubStateChunk<T>
 	, parentActions:AR_Build.Actions
 	, parentIdentifier:AR_Conf.CapitalizedString
 	, parentType:AR_Conf.SnakeCasedString
+	, path:string[]
 	)
 	{
 
 		const processors:AR_Build.ActionProcessors = {};
 		const actions:AR_Build.Actions = {};
 
-		processRootLevelChunk(stateChunk,parentState,processors,actions,parentIdentifier,parentType);
+		processRootLevelChunk(stateChunk,parentState,processors,actions,parentIdentifier,parentType,path);
 
 		const combinedProcessor = function combinedProcessor
 			( state:T
-			, payload:AR_Redux.Payload<T>
-			, meta:AR_Redux.Meta
+			, payload:any
+			, meta:any
 			, type:AR_Conf.SnakeCasedString
 			)
 			{

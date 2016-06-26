@@ -1,5 +1,6 @@
 import assign from './utils/assign';
 import SKIP from './SKIP';
+import defaultAsyncActions from './defaultAsyncActions';
 
 /**
  * 
@@ -19,11 +20,11 @@ export default function mapActionCreatorsToDispatch
 		const actions = {
 			
 		} as AR_Conf.ActionDispatchers;
-		creators.forEach(function(creator){
-			const {identifier} = creator;
-			const isErrorHandler = (identifier == 'error');
-			
-			actions[identifier] = isErrorHandler ?	
+		defaultAsyncActions.forEach(function(name,index){
+			const creator = creators[index];
+			const isErrorHandler = (name == 'error');
+
+			actions[name] = isErrorHandler ?	
 				(reason,meta)=>{
 					const err:Error = (!(reason instanceof Error)) ? new Error(reason) : reason;
 					const message = err.message;
@@ -33,6 +34,7 @@ export default function mapActionCreatorsToDispatch
 				} :
 			 	(payload,meta)=> dispatch(creator(payload,meta))
 			; 
-		});
+		})
+		
 		return actions;
 	} 
