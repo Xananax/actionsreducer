@@ -15,6 +15,7 @@ const Wrapper = ({text='',source='',children=null,name=''})=> (text || source ||
 		)}>
 		{text && <HTML text={text}/>}
 		{source && <Source code={source}/>}
+		{(text || source) && <br/>}
 		{children}
 		<hr/>
 	</div>);

@@ -42,7 +42,10 @@ export default class Source extends Component<SourcePropTypes,SourceState>{
 			, hidden && style.hidden
 			]);
 		const markup = `language-${language?language:'typescript'}`;
-		const highlighted = Prism.highlight(code, Prism.languages['typescript']);
+		const highlighted = Prism.highlight
+			( code.replace('../../../../src','actionreducer')
+			, Prism.languages['typescript']
+			);
 
 		return (
 			<div className={className}>

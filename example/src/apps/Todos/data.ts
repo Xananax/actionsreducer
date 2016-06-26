@@ -16,9 +16,10 @@ const todos = simpleStore(
 		{ state:assign(
 			addMany(
 				state
-				,	[ { text: '2Pac' }
-					, { text: 'Dr.Dre' }
-					, { text: 'Big Pun' }
+				,	[ { text: 'Test ActionsCreator' }
+					, { text: 'Use ActionsCreator' }
+					, { text: '...?' }
+					, { text: 'profit!' }
 					]
 			),{
 				visibilityFilter:VISIBILITY_FILTERS.SHOW_ALL	

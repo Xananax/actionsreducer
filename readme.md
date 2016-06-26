@@ -82,7 +82,7 @@ To run them:
  - clone the repo `git clone https://github.com/Xananax/actionsreducer.git && cd actionsreducer`
  - install needed dev modules: `npm install`
  - install typescript typings: `npm run typings`
- - run the example server: `npm run example`
+ - run the example server: `npm start`
 
 Too lazy? Here's an example for your reading pleasure:
 
@@ -449,7 +449,7 @@ Then:
  - compile browser: `npm run build:client`
  - compile for server: `npm run build:server`
  - compile everything `npm run dist`
- - run examples: `npm run example` (you can specify the port: `PORT=3000 npm run example`)
+ - run examples: `npm start` (you can specify the port: `PORT=3000 npm start`, defaults to `8080`)
  - build examples: `npm run build:example`.
 
 ## Tests

@@ -1,0 +1,60 @@
+.Item
+	display block
+	width 100%
+	position relative
+	height 2em
+	line-height 1em
+	padding .3em;
+	border-bottom 1px solid #ccc
+	background #ddd
+	box-sizing border-box
+	margin .1em 0 0 0
+	overflow hidden
+	input[type='text']
+		padding 0
+		margin 0
+		font-size 1em
+		height 1em
+		border none
+		min-width 10em
+		display inline-block
+		background #fffadd
+	form
+		display inline
+	&:first-child
+		border-top 1px solid #ccc
+	&.completed
+		text-decoration line-through
+.buttons
+	font-family monospace
+	position absolute
+	right 1em
+	top .7em
+	button
+		box-sizing border-box
+		border 1px solid #fff
+		cursor pointer
+		height 1em
+		min-width 1em
+		line-height 1em
+		font-size 1em
+		border none
+		margin 0 .1em
+		color #fdfdfd
+		&:disabled
+			cursor not-allowed
+			background #ccc
+.select
+		float right
+.right
+	background #4682B4
+.remove
+	background tomato
+.up,.down
+	background teal
+.spacer
+	display inline-block
+	width 0
+for num in (1...10)
+	.spacer-{num}
+		width (num)em

@@ -20,7 +20,6 @@ const getPage = (page:string):string => (
 			pages['404']
 )
 
-
 const Page:React.StatelessComponent<PagePropTypes> = ({params:{page}}) => <Wrapper text={getPage(page)} name='page'/>
 
 export default Page;

@@ -100,7 +100,7 @@ declare namespace AR_Redux{
 	}
 
 	export interface AnyActionCreator<T>{
-		(payload:T,meta?:any,err?:boolean):T;
+		(payload?:T,meta?:any,err?:boolean):T;
 		start:AnyActionCreator<T>;
 		type:AR_Conf.SnakeCasedString;
 		identifier:string;

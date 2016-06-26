@@ -79,7 +79,7 @@ export default function simpleStore<T>(create?:AR_Store.StoreCreator<T>,process?
 		}
 
 	function get(state:AR_Store.State<T>,id:number){
-		const index = state.ids[id];
+		const index = state.ids.indexOf(id);
 		return state.byId[index];
 	}
 
