@@ -22,7 +22,7 @@
     "dist": "npm run clean && npm run build",
     "test": "karma start",
     "test:once": "karma start --single-run",
-    "prepublish": "npm run test:once && npm run clean && npm run build && npm run git",
+    "prepare": "npm run test:once && npm run clean && npm run build && npm run git",
     "start":"npm run example",
     "example": "node ./example/server.js",
     "typings": "typings"
