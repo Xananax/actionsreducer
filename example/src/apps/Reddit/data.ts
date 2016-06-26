@@ -79,7 +79,7 @@ export default
 			, fetch:
 				{ _:({postsBySubreddit,selectedSubreddit},payload,meta,actions,dispatch)=>
 					shouldFetchPosts(postsBySubreddit,selectedSubreddit) ?
-						fetch(`http://www.reddit.com/r/${selectedSubreddit}.json`)
+						fetch(`https://www.reddit.com/r/${selectedSubreddit}.json`)
 							.then(response => response.json()) 
 							.then(json=>json.data.children.map(child=>child.data))
 							.catch(err=>console.log(err)):
