@@ -22,10 +22,16 @@ Furthermore, the ActionsReducer project itself demonstrates:
 npm install --save actionsreducers
 ```
 
+also, in case you don't have, already:
+
+```bash
+npm install --save redux react-redux redux-thunk
+```
+
 then
 
 
-```js
+```javascript
 // data.js
 import actionsreducer from 'actionreducer';
 
@@ -78,7 +84,7 @@ To run them:
 
 Too lazy? Here's an example for your reading pleasure:
 
-```js
+```javascript
 // data.js
 import actionsreducer from 'actionreducer';
 
@@ -216,7 +222,7 @@ Both are optional.
 
 Here's an example:
 
-```js
+```javascript
 import actionsreducer,{ simpleStore, assign } from 'actionsreducer';
 
 const [reducer,state,actions] = actionsreducer({
@@ -247,6 +253,178 @@ const [reducer,state,actions] = actionsreducer({
 	)
 });
 ```
+
+Async actions are possible too:
+
+```javascript
+const [reducer,state,actions] = actionsreducer({
+	//...
+	notes:{
+		state:{
+			notes:[]
+		,	status:'nothing'
+		}
+		actions:{
+			add:{ 
+				_(state,payload,meta,actions,dispatch,type){
+					if(payload == 'error'){
+						return actions.error('error triggered by you!');
+					}
+					return new Promise((resolve,reject)=>{
+						setTimeout(()=>{resolve('a new note')},500);
+					})
+				}
+			,	started(state,payload){
+					return {status:'loading'}
+				}
+			,	success({notes},text){
+					return {
+						notes:notes.concat([{text}])
+					}
+				}
+			,	error(state,payload){
+					return {status:'error'}
+				}
+			}
+		}
+	}
+	//...
+})
+```
+
+## API
+
+There's only one important function: 
+
+```javascript
+actionsreducer(config)=>[reducer,state,actions];
+````
+
+### Config
+
+is an object of `stateChunks`
+
+#### StateChunk
+
+Signature:
+```javascript
+{
+	state:any
+,	actions:{
+		[name:string]:ActionProcessor | AsyncActionProcessor | StateChunk
+	}
+}
+```
+
+`StateChunk`s can be nested; If a `StateChunk` is nested in another, then it will receive only the relevant part of state.
+
+in other words, this:
+
+```javascript
+{
+	// ...
+	store{
+		state:{}	error?:ActionProcessor;
+	started?:ActionProcessor;
+	cancelled?:ActionProcessor;
+		actions:{
+			subState:{
+				state:[]
+			,	actions:{
+					doSomething(){}
+				}
+			}
+		}
+	}
+	// ...
+}
+``` 
+will resolve to a state `{store:{subState:[]}}` and to the action creator `actions.storeSubStateDoSomething()` which will dispatch the action `STORE_SUBSTATE_DOSOMETHING`.
+
+
+#### ActionProcessor
+
+```javascript
+someAction(state:any,payload?:any,meta?:any,type?:string)=>state
+```
+
+This will transform into:
+
+	- an `ActionCreator` called `someAction` which will dispatch an action of type `'SOMEACTION'`
+	- a reducer `SOMEACTION` that will be called upon dispatching the action  
+
+Note that an action processor does not need to return the whole state it is passed. It only needs to return the part that it is concerned with.  
+Anything returned will extend the current state. A new state will be created if necessary (if the returned value is different from the previous one). Note, however, that this operation is **not** recursive.
+
+Returning `null`, `false`, or the `CANCEL` symbol (available as an export, `import {CANCEL} from 'actionsreducer'` will short-circuit the operation. There is no benefit in returning `CANCEL`, only more code clarity.
+
+#### AsyncActionProcessor
+
+```javascript
+{
+	_ : ( state:any, payload:any, meta:any, actions, dispatch, type:string )=>any;
+,	success:ActionProcessor
+,	error?:ActionProcessor
+,	started?:ActionProcessor
+,	cancelled?:ActionProcessor
+}
+```
+The function `'_'` is your async function. It's expected to return a Promise, but if you don't, what you return will be promisified.  
+Returning an Error, or `reject`ing a Promise will trigger the `error` ActionProcessor. returning `null`, `false`, or the `CANCEL` constant (available as an export `import {CANCEL} from 'actionsreducer'`) will trigger the `cancel` action.    
+`started` will be called as soon as you run the async function;  
+`success`, the only required member besides `'_'`, will be called if the async function returns a truthy value or a `resolve`d Promise.
+
+Additionally to the regular `state`, `payload`, and `meta`, an AsyncActionProcessor receives an `actions` object which contains:
+
+ - `actions.success(any)`: dispatches the success action
+ - `actions.error(any)`: dispatches the error action
+ - `actions.cancelled(any)`: dispatches the cancelled action
+
+Just like a sync ActionCreator, an AsyncActionCreator does not need to return the whole state, but only the part it is concerned with.
+
+### Returned Objects
+
+`actionsreducer` returns an array `[reducer,state,actions]`.
+
+#### Reducer
+
+```javascript
+(state,action)=>state
+```
+
+A regular Redux reducer. The reducer takes care of checking for equality (with `==`) and of not updating if nothing is returned.
+
+#### State
+
+```javascript
+{
+	[name:string]:any
+}
+```
+
+The combined state of all the passed StateChunks
+
+
+#### Actions
+
+```javascript
+{
+	[name:string]:ActionCreator
+}
+```
+An object of all ActionCreators. ActionCreators names are generated by `path+actionName`, where `path` is the whole set of previous StateChunks, and `actionName` is the key of the particular ActionProcessor.
+
+If you have a deeply nested actionProcessor, this can result in `forumRoomsUsersActiveSelect`, which is one more reason to try to keep the state as flat as possible.
+
+#### ActionCreator
+
+```javascript
+actionCreator(payload:any,meta?:any,err?:boolean)=>Action
+```
+
+Returns an action. the object containing all `ActionCreator`s can be found on the third element of the array returned by `actionsreducer`.
+If `err` is set to true, then whatever `payload` is will be transformed into an Error (unless it's already an Error)
+
 
 ## Development
 
