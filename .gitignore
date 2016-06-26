@@ -2,3 +2,4 @@ node_modules
 dist
 browser
 typings
+npm-debug.log

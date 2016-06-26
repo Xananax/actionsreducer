@@ -2,3 +2,4 @@ node_modules
 example
 src
 typings
+npm-debug.log
